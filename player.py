@@ -17,3 +17,9 @@ class Player(Turtle):
 
     def move(self):
         self.forward(MOVE_DISTANCE)
+
+    def is_stage_win(self):
+        return self.ycor() > FINISH_LINE_Y
+
+    def next_stage(self):
+        self.goto(STARTING_POSITION)
