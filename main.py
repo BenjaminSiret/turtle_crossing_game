@@ -9,35 +9,31 @@ screen.setup(width=600, height=600)
 screen.tracer(0)
 
 player = Player()
-cars = []
+car_manager = CarManager()
+scoreboard = Scoreboard()
 
 screen.listen()
 screen.onkey(player.move, "Up")
 
-loop = 0
+
 game_is_on = True
 while game_is_on:
-    loop += 1
+
     time.sleep(0.1)
     screen.update()
 
-    # Create a car every 6 times loop
-    if loop % 6 == 0:
-        car = CarManager()
-        cars.append(car)
+    car_manager.create_car()
+    car_manager.move_cars()
 
-        # Detect collision between player and a car
+    for car in car_manager.cars:
         if player.distance(car) < 20:
+            scoreboard.game_over()
             game_is_on = False
 
-        # Detect when player has reach the finish line
         if player.is_stage_win():
             player.next_stage()
-            car.increase_car_speed()
-            print(car.car_speed) # I have to fix the problem with increase speed
-
-    # move the cars
-    for car in cars:
-        car.move()
+            car_manager.increase_car_speed()
+            scoreboard.increase_level()
+            scoreboard.update_level()
 
 screen.exitonclick()
